@@ -250,7 +250,8 @@ def items(by_milestone, by_sprint, show_done):
 
     if by_milestone:
         grouped = sorted(
-            group_by(items, opt("milestone", "title", default="None")).items()
+            group_by(items, opt("milestone", "title", default="No milestone")).items(),
+            key=lambda x: milestone_sorter(x[0])
         )
         other_column = opt("sprint", "title", default="No sprint")
     else:
@@ -260,7 +261,7 @@ def items(by_milestone, by_sprint, show_done):
                 opt(
                     "sprint",
                     lambda x: f"{sprint_end_date(x)} {x['title']}",
-                    default="None",
+                    default="No Sprint",
                 ),
             ).items()
         )
@@ -269,28 +270,55 @@ def items(by_milestone, by_sprint, show_done):
     print_items(grouped, other_column)
 
 
-def print_items(grouped, other_column, print=print, include_assignees=True):
+def milestone_sorter(title):
+    res = title.split(" - ")
+    if len(res) > 1 and "Ad Hoc" in res[1]:
+        res[1] = "z_" + res[1]
+    return " - ".join(res)
+
+
+def get_label_sort(item):
+    if "labels" not in item:
+        return 0
+    labels = item["labels"]
+    if "bug" in labels:
+        return -2
+    if "fix" in labels:
+        return 0
+    if "icebox" in labels:
+        return 1
+    return 0
+
+
+def print_items(grouped, other_column, print=print, include_assignees=True, status_first=True):
     for category, items in grouped:
         print()
         print(f"{category}:")
-        columns = [
-            "status",
+        columns = ["status"] if status_first else [lambda item: other_column(item)[:40]]
+        columns.extend([
             "title",
             lambda x: x["repository"].split("/")[-1]
                       + " #"
                       + str(x["content"]["number"]),
             opt("labels", lambda x: ",".join(x))
-        ]
-        if include_assignees:
+        ])
+        if status_first and include_assignees:
             columns.append(opt("assignees", lambda x: ", ".join(map(login_to_name, x))))
 
-        columns.append(other_column)
+        if status_first:
+            columns.append(other_column)
+
+        if not status_first and include_assignees:
+            columns.append(opt("assignees", lambda x: ", ".join(map(login_to_name, x))))
+
+        if not status_first:
+            columns.append("status")
 
         def sort_by(item):
             res = (
                 status_sort[item["status"]],
-                not ("bug" in item["labels"] if "labels" in item else False),
-                other_column(item),
+                get_label_sort(item),
+                milestone_sorter(other_column(item)),
                 -len(item["assignees"]) if "assignees" in item else 0,
                 -item["content"]["number"],
             )
@@ -315,10 +343,57 @@ def standup():
     print_items(sorted(items_by_assignee.items()), opt("milestone", "title", default="No milestone"), include_assignees=False)
 
 
+@cli.command()
+@click.option("--by-assignee", is_flag=True, help="group items by assignee")
+@click.option("--clipper", is_flag=True, help="show only clipper items")
+@click.option("--bugs", is_flag=True, help="show only bugs")
+def backlog(by_assignee, clipper, bugs):
+    items = db.retrieve()["project_items"]["items"]
+    items = [item for item in items if not ("sprint" in item and sprint_is_active(item["sprint"])) and not item["status"] == "Done"]
+    if clipper:
+        items = [item for item in items if "labels" in item and "clipper" in item["labels"]]
+    if bugs:
+        items = [item for item in items if "labels" in item and "bug" in item["labels"]]
+    if by_assignee:
+        grouped = sorted(group_by(items, opt("assignees", lambda x: map(login_to_name, x), tuple, sorted,
+                                                lambda x: ", ".join(x), default="Unassigned")).items())
+    else:
+        grouped = sorted(
+            group_by(
+                items,
+                opt(
+                    "sprint",
+                    lambda x: f"{sprint_end_date(x)} {x['title']}",
+                    default="Backlog",
+                ),
+            ).items()
+        )
+    print_items(grouped, opt("milestone", "title", default="No milestone"), status_first=False)
+
+@cli.command()
+def csv():
+    items = db.retrieve()["project_items"]["items"]
+    columns = [
+        lambda item: opt("milestone", "title", default="No milestone")(item),
+        opt("title"),
+        lambda x: x["repository"].split("/")[-1]
+                  + " #"
+                  + str(x["content"]["number"]),
+        opt("labels", lambda x: ",".join(x), default=""),
+        opt("status")
+    ]
+    import csv
+    with open("pm.csv", "w") as f:
+        writer = csv.writer(f)
+        for item in items:
+            writer.writerow(column(item) for column in columns)
+
+
 status_sort = {
     "In Review": 1,
     "In Progress": 2,
     "Todo": 3,
+    "Blocked": 3,
     "Done": 4,
 }
 
