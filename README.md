@@ -9,7 +9,7 @@ To update the cache, periodically run `pm fetch --items`. This will download any
 ## Installation
 Prerequisite software:
 - git
-- [github cli](https://cli.github.com/)
+- [github cli](https://cli.github.com/) (should be accessible via the PATH environment variable as `gh`)
 - Python 3.9.6 (other versions may work, but your mileage may vary)
 
 For now, the expectation is that if you're installing `pm`, you're also going to be tweaking the code. For this reason, start out by cloning this repository
@@ -24,19 +24,36 @@ cd aerie-pm
 python3 -m venv venv
 ```
 
-Now source this venv, and install dependencies
+Next, install dependencies in this virtual environment
 ```shell
-source venv/bin/activate
-pip install -r requirements.txt
+./venv/bin/pip install -r requirements.txt
 ```
 
 Finally, install the repository itself in "editable" mode
 ```shell
-pip install -e .
+./venv/bin/pip install -e .
 ```
 
 This will generate an executable at `aerie-pm/venv/bin/pm`. You can add it to your path, so you won't need to source `venv/bin/activate` in the future.
 
 ```shell
 echo "export PATH=\"$(pwd)/venv/bin:\$PATH\"" >> ~/.zshrc
+```
+
+Check that the installation was successful by running `pm --help`
+```shell
+> pm --help
+Usage: pm [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  backlog
+  csv
+  fetch
+  issues
+  items
+  standup
+  view
 ```
