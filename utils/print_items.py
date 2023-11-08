@@ -1,9 +1,9 @@
 from tabulate import tabulate
 
-from login_to_name import login_to_name
-from make_table import make_table
-from opt import opt
-from sorters import get_label_sort, status_sort, milestone_sorter
+from utils.login_to_name import login_to_name
+from utils.make_table import make_table
+from utils.opt import opt
+from utils.sorters import get_label_sort, status_sort, milestone_sorter
 
 
 def print_items(

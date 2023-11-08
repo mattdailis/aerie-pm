@@ -1,9 +1,9 @@
 from tabulate import tabulate
 
-from group_by import group_by
-from make_table import make_table
+from utils.group_by import group_by
+from utils.make_table import make_table
 
-from opt import opt
+from utils.opt import opt
 
 
 def print_issues(issues, show_state=True):
