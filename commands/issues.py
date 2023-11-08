@@ -4,6 +4,7 @@ from cli import cli
 import db
 from print_issues import print_issues
 
+
 @cli.command()
 @click.option("--show-closed", is_flag=True, help="include closed issues in output")
 @click.option(

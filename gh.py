@@ -77,7 +77,11 @@ def get_issues(repo, updated_after=None):
             )
         )
     else:
-        return json.loads(run(f'gh issue -R {repo} list --json {",".join(issue_columns)} --limit 100000 -s all --search "updated:>{updated_after}"'))
+        return json.loads(
+            run(
+                f'gh issue -R {repo} list --json {",".join(issue_columns)} --limit 100000 -s all --search "updated:>{updated_after}"'
+            )
+        )
 
 
 def get_project_items(org, project_id):
@@ -96,12 +100,18 @@ def get_prs(repo, updated_after=None):
             )
         )
     else:
-        return json.loads(run(f'gh pr -R {repo} list --json {",".join(pr_columns)} --limit 1500 -s all --search "updated:>{updated_after}"'))
+        return json.loads(
+            run(
+                f'gh pr -R {repo} list --json {",".join(pr_columns)} --limit 1500 -s all --search "updated:>{updated_after}"'
+            )
+        )
 
 
 def run(command_str):
     print(command_str)
-    return subprocess.run([cmd.strip('"') for cmd in command_str.split()], stdout=subprocess.PIPE).stdout
+    return subprocess.run(
+        [cmd.strip('"') for cmd in command_str.split()], stdout=subprocess.PIPE
+    ).stdout
 
 
 if __name__ == "__main__":

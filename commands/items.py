@@ -18,10 +18,7 @@ def items(by_milestone, by_sprint, show_done):
     issues = db.retrieve()["issues"]
 
     # Issues are easier to keep in sync - prefer the issue's milestone if available
-    issue_dict = {
-        (issue["repo"], issue["number"]): issue
-        for issue in issues
-    }
+    issue_dict = {(issue["repo"], issue["number"]): issue for issue in issues}
 
     for item in items:
         repo = item["repository"].split("/")[-1]
@@ -39,7 +36,7 @@ def items(by_milestone, by_sprint, show_done):
     if by_milestone:
         grouped = sorted(
             group_by(items, opt("milestone", "title", default="No milestone")).items(),
-            key=lambda x: milestone_sorter(x[0])
+            key=lambda x: milestone_sorter(x[0]),
         )
         other_column = opt("sprint", "title", default="No sprint")
     else:
@@ -56,6 +53,3 @@ def items(by_milestone, by_sprint, show_done):
         other_column = opt("milestone", "title", default="No milestone")
 
     print_items(grouped, other_column)
-
-
-

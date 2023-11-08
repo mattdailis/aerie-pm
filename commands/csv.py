@@ -2,19 +2,19 @@ from cli import cli
 import db
 from opt import opt
 
+
 @cli.command()
 def csv():
     items = db.retrieve()["project_items"]["items"]
     columns = [
         lambda item: opt("milestone", "title", default="No milestone")(item),
         opt("title"),
-        lambda x: x["repository"].split("/")[-1]
-                  + " #"
-                  + str(x["content"]["number"]),
+        lambda x: x["repository"].split("/")[-1] + " #" + str(x["content"]["number"]),
         opt("labels", lambda x: ",".join(x), default=""),
-        opt("status")
+        opt("status"),
     ]
     import csv
+
     with open("pm.csv", "w") as f:
         writer = csv.writer(f)
         for item in items:

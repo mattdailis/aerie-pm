@@ -14,11 +14,15 @@ def print_issues(issues, show_state=True):
             "repo",
             "number",
             "title",
-            lambda issue: ",".join(label["name"] for label in issue["labels"]) if "labels" in issue else "",
+            lambda issue: ",".join(label["name"] for label in issue["labels"])
+            if "labels" in issue
+            else "",
         ]
         if show_state:
             columns.append("state")
         print(
             f"### {milestone}:\n"
-            + tabulate(make_table(columns, issues, sort_by=opt("updatedAt", default="3000")))
+            + tabulate(
+                make_table(columns, issues, sort_by=opt("updatedAt", default="3000"))
+            )
         )

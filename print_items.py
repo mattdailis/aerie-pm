@@ -5,18 +5,23 @@ from make_table import make_table
 from opt import opt
 from sorters import get_label_sort, status_sort, milestone_sorter
 
-def print_items(grouped, other_column, print=print, include_assignees=True, status_first=True):
+
+def print_items(
+    grouped, other_column, print=print, include_assignees=True, status_first=True
+):
     for category, items in grouped:
         print()
         print(f"{category}:")
         columns = ["status"] if status_first else [lambda item: other_column(item)[:40]]
-        columns.extend([
-            "title",
-            lambda x: x["repository"].split("/")[-1]
-                      + " #"
-                      + str(x["content"]["number"]),
-            opt("labels", lambda x: ",".join(x))
-        ])
+        columns.extend(
+            [
+                "title",
+                lambda x: x["repository"].split("/")[-1]
+                + " #"
+                + str(x["content"]["number"]),
+                opt("labels", lambda x: ",".join(x)),
+            ]
+        )
         if status_first and include_assignees:
             columns.append(opt("assignees", lambda x: ", ".join(map(login_to_name, x))))
 

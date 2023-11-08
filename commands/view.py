@@ -21,7 +21,10 @@ from console import _console
     "-a", "--aerie", is_flag=True, help="specify that this issue should be from aerie"
 )
 @click.option(
-    "-d", "--docs", is_flag=True, help="specify that this issue should be from aerie-docs"
+    "-d",
+    "--docs",
+    is_flag=True,
+    help="specify that this issue should be from aerie-docs",
 )
 def view(issue_number, ui, aerie, docs):
     issues = db.retrieve()["issues"]

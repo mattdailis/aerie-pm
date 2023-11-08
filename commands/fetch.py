@@ -7,8 +7,11 @@ from print_issues import print_issues
 
 from repos import repos
 
+
 @cli.command()
-@click.option("--items", is_flag=True, help="also fetch items. This may take a little while")
+@click.option(
+    "--items", is_flag=True, help="also fetch items. This may take a little while"
+)
 def fetch(items):
     fetch_items = items
     try:
@@ -21,7 +24,9 @@ def fetch(items):
     new_issues = []
     new_prs = []
     for repo in repos:
-        cached_issue_update_times = [issue["updatedAt"] for issue in issues if issue["repo"] == repo]
+        cached_issue_update_times = [
+            issue["updatedAt"] for issue in issues if issue["repo"] == repo
+        ]
         if cached_issue_update_times:
             last_updated = max(cached_issue_update_times)
         else:
@@ -37,7 +42,11 @@ def fetch(items):
             new_prs.append(pr)
 
     updated_issues = {(issue["repo"], issue["number"]) for issue in new_issues}
-    issues = [issue for issue in issues if (issue["repo"], issue["number"]) not in updated_issues]
+    issues = [
+        issue
+        for issue in issues
+        if (issue["repo"], issue["number"]) not in updated_issues
+    ]
 
     print(f"Updated issues ({len(new_issues)}):")
     print_issues(new_issues)
