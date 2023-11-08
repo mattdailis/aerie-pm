@@ -1,6 +1,6 @@
 from cli import cli
 import db
-from opt import opt
+from utils.opt import opt
 
 
 @cli.command()

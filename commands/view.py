@@ -6,8 +6,8 @@ from rich.markdown import Markdown
 
 from cli import cli
 import db
-from login_to_name import login_to_name
-from print_issues import print_issues
+from utils.login_to_name import login_to_name
+from utils.print_issues import print_issues
 
 from console import _console
 

@@ -2,12 +2,12 @@ import click
 
 from cli import cli
 import db
-from group_by import group_by
-from login_to_name import login_to_name
-from print_items import print_items
-from sprint_end_date import sprint_end_date
-from sprint_is_active import sprint_is_active
-from opt import opt
+from utils.group_by import group_by
+from utils.login_to_name import login_to_name
+from utils.print_items import print_items
+from utils.sprint_end_date import sprint_end_date
+from utils.sprint_is_active import sprint_is_active
+from utils.opt import opt
 
 
 @cli.command()

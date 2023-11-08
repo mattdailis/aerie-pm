@@ -2,11 +2,11 @@ import click
 
 from cli import cli
 import db
-from group_by import group_by
-from opt import opt
-from sorters import milestone_sorter
-from print_items import print_items
-from sprint_end_date import sprint_end_date
+from utils.group_by import group_by
+from utils.opt import opt
+from utils.sorters import milestone_sorter
+from utils.print_items import print_items
+from utils.sprint_end_date import sprint_end_date
 
 
 @cli.command()

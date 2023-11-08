@@ -1,11 +1,11 @@
 from cli import cli
 import db
 
-from group_by import group_by
-from login_to_name import login_to_name
-from opt import opt
-from print_items import print_items
-from sprint_is_active import sprint_is_active
+from utils.group_by import group_by
+from utils.login_to_name import login_to_name
+from utils.opt import opt
+from utils.print_items import print_items
+from utils.sprint_is_active import sprint_is_active
 
 
 @cli.command()

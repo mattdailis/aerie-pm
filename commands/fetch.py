@@ -3,7 +3,7 @@ import click
 import gh
 from cli import cli
 import db
-from print_issues import print_issues
+from utils.print_issues import print_issues
 
 from repos import repos
 
