@@ -34,7 +34,7 @@ Finally, install the repository itself in "editable" mode
 ./venv/bin/pip install -e .
 ```
 
-This will generate an executable at `aerie-pm/venv/bin/pm`. You can add it to your path, so you won't need to source `venv/bin/activate` in the future.
+This will generate an executable at `aerie-pm/venv/bin/pm`. Let's add it to the path to make it accessible as `pm`:
 
 ```shell
 echo "export PATH=\"$(pwd)/venv/bin:\$PATH\"" >> ~/.zshrc
