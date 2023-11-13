@@ -22,7 +22,7 @@ def standup():
             tuple,
             sorted,
             lambda x: ", ".join(x),
-            default=tuple(),
+            default="z_None"
         ),
     )
     print_items(
