@@ -8,7 +8,9 @@ from utils.print_issues import print_issues
 @cli.command()
 @click.option("--show-closed", is_flag=True, help="include closed issues in output")
 @click.option(
-    "--not-in-project", is_flag=True, help="show only issues that are not in a project. Useful for triaging new issues"
+    "--not-in-project",
+    is_flag=True,
+    help="show only issues that are not in a project. Useful for triaging new issues",
 )
 def issues(show_closed, not_in_project):
     """
