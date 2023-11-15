@@ -27,6 +27,10 @@ from console import _console
     help="specify that this issue should be from aerie-docs",
 )
 def view(issue_number, ui, aerie, docs):
+    """
+    Show the contents of the given issue or PR.
+    If there are multiple issues with the same number, use --ui, --aerie, or --docs to disambiguate.
+    """
     issues = db.retrieve()["issues"]
     prs = db.retrieve()["prs"]
 

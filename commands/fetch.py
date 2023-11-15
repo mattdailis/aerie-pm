@@ -13,6 +13,9 @@ from repos import repos
     "--items", is_flag=True, help="also fetch items. This may take a little while"
 )
 def fetch(items):
+    """
+    Retrieve any updated issues from the Aerie GitHub repos
+    """
     fetch_items = items
     try:
         issues = db.retrieve()["issues"]

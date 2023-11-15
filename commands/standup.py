@@ -29,6 +29,9 @@ active_team_members = [
 
 @cli.command()
 def standup():
+    """
+    Show items in current sprint grouped by assignee(s)
+    """
     items = []
     active_sprint = None
     for item in db.retrieve()["project_items"]["items"]:

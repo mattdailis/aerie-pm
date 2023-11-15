@@ -15,6 +15,10 @@ from utils.opt import opt
 @click.option("--clipper", is_flag=True, help="show only clipper items")
 @click.option("--bugs", is_flag=True, help="show only bugs")
 def backlog(by_assignee, clipper, bugs):
+    """
+    Show any open items that are not planned in the current sprint
+    """
+
     items = db.retrieve()["project_items"]["items"]
     items = [
         item

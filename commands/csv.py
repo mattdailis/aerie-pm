@@ -5,6 +5,9 @@ from utils.opt import opt
 
 @cli.command()
 def csv():
+    """
+    Write items to a csv file called pm.csv in the current directory
+    """
     items = db.retrieve()["project_items"]["items"]
     columns = [
         lambda item: opt("milestone", "title", default="No milestone")(item),

@@ -12,6 +12,9 @@ from utils.opt import opt
 @click.option("--open", is_flag=True, help="show only open PRs")
 @click.option("--merged", is_flag=True, help="show only open PRs")
 def prs(open, merged):
+    """
+    List PRs in Aerie repos
+    """
     if open and merged:
         print("Pick one: --open, or --merged")
         return

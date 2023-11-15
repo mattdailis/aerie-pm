@@ -14,6 +14,9 @@ from utils.sprint_end_date import sprint_end_date
 @click.option("--by-sprint", is_flag=True, help="group items by sprint")
 @click.option("--show-done", is_flag=True, help="include Done items in output")
 def items(by_milestone, by_sprint, show_done):
+    """
+    List items in the Aerie project
+    """
     items = db.retrieve()["project_items"]["items"]
     issues = db.retrieve()["issues"]
 
