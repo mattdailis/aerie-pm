@@ -1,8 +1,11 @@
 import click
+from tabulate import tabulate
 
 from cli import cli
 import db
-from utils.print_issues import print_issues
+from utils.group_by import group_by
+from utils.make_table import make_table
+from utils.opt import opt
 
 
 @cli.command()
@@ -13,4 +16,21 @@ def prs(open):
     if open:
         prs = [pr for pr in prs if pr["state"] == "OPEN"]
 
-    print_issues(prs, show_state=True)
+    for milestone, issues in sorted(
+        group_by(prs, opt("milestone", "title", default="z_None")).items()
+    ):
+        columns = [
+            "repo",
+            "number",
+            "title",
+            lambda issue: ",".join(label["name"] for label in issue["labels"])
+            if "labels" in issue
+            else "",
+            "state",
+        ]
+        print(
+            f"### {milestone}:\n"
+            + tabulate(
+                make_table(columns, issues, sort_by=opt("updatedAt", default="3000"))
+            )
+        )
