@@ -42,3 +42,9 @@ def prs(open, merged):
                 make_table(columns, issues, sort_by=opt("updatedAt", default="3000"))
             )
         )
+        """
+        What else do I want to know about PRs?
+
+        - Is this closing an issue, or is it ad-hoc?
+        - Is it stale?
+        """
