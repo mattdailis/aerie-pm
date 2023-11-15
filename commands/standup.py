@@ -23,7 +23,7 @@ active_team_members = [
     "jmdelfa",
     "duranb",
     "AaronPlave",
-    "jeffpamer"
+    "jeffpamer",
 ]
 
 
@@ -53,7 +53,9 @@ def standup():
     )
 
     print(active_sprint["title"])
-    print(f"{work_days_elapsed} work days spent (including today), {work_days_remaining} to go")
+    print(
+        f"{work_days_elapsed} work days spent (including today), {work_days_remaining} to go"
+    )
 
     print_items(
         sorted(items_by_assignee.items()),
