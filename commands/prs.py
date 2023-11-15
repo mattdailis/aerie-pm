@@ -10,11 +10,19 @@ from utils.opt import opt
 
 @cli.command()
 @click.option("--open", is_flag=True, help="show only open PRs")
-def prs(open):
+@click.option("--merged", is_flag=True, help="show only open PRs")
+def prs(open, merged):
+    if open and merged:
+        print("Pick one: --open, or --merged")
+        return
+
     prs = db.retrieve()["prs"]
 
     if open:
         prs = [pr for pr in prs if pr["state"] == "OPEN"]
+
+    if merged:
+        prs = [pr for pr in prs if pr["state"] == "MERGED"]
 
     for milestone, issues in sorted(
         group_by(prs, opt("milestone", "title", default="z_None")).items()
