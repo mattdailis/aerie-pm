@@ -56,8 +56,9 @@ def standup():
     )
 
     print(active_sprint["title"])
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
     print(
-        f"{work_days_elapsed} work days spent (including today), {work_days_remaining} to go"
+        f"{work_days_elapsed} work days spent{' (including today)' if not is_day_off(today) else ''}, {work_days_remaining} to go"
     )
 
     print_items(
@@ -68,7 +69,7 @@ def standup():
 
     not_on_the_board = set(active_team_members)
     for item in items:
-        for assignee in item["assignees"]:
+        for assignee in opt("assignees", default=[])(item):
             if assignee in not_on_the_board:
                 not_on_the_board.remove(assignee)
 
