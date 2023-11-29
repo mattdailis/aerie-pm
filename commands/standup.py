@@ -1,5 +1,7 @@
 import datetime
 
+import click
+
 from cli import cli
 import db
 from utils.days_off import is_day_off
@@ -28,16 +30,34 @@ active_team_members = [
 
 
 @cli.command()
-def standup():
+@click.option("--previous", is_flag=True, help="show previous sprint")
+def standup(previous):
     """
     Show items in current sprint grouped by assignee(s)
     """
+
+    sprints = []
+    all_items = db.retrieve()["project_items"]["items"]
+    for item in all_items:
+        if "sprint" in item and not item["sprint"] in sprints:
+            sprints.append(item["sprint"])
+
+    sprint_to_display = None
+    if not previous:
+        for sprint in sprints:
+            if sprint_is_active(sprint):
+                sprint_to_display = sprint
+                break
+        if sprint_to_display is None:
+            print("There is no active sprint")
+            return
+    else:
+        sprint_to_display = max(filter(lambda sprint: 0 < (datetime.datetime.utcnow() - datetime.datetime.strptime(sprint["startDate"], "%Y-%m-%d")).days and not sprint_is_active(sprint), sprints), key=lambda sprint: sprint["startDate"])
+
     items = []
-    active_sprint = None
-    for item in db.retrieve()["project_items"]["items"]:
-        if "sprint" in item and sprint_is_active(item["sprint"]):
+    for item in all_items:
+        if "sprint" in item and item["sprint"] == sprint_to_display:
             items.append(item)
-            active_sprint = item["sprint"]
 
     items_by_assignee = group_by(
         items,
@@ -52,13 +72,13 @@ def standup():
     )
 
     work_days_elapsed, work_days_remaining = get_sprint_work_days_breakdown(
-        active_sprint
+        sprint_to_display
     )
 
-    print(active_sprint["title"])
+    print(sprint_to_display["title"])
     today = datetime.datetime.today().strftime('%Y-%m-%d')
     print(
-        f"{work_days_elapsed} work days spent{' (including today)' if not is_day_off(today) else ''}, {work_days_remaining} to go"
+        f"{work_days_elapsed} work days spent{' (including today)' if not is_day_off(today) and not previous else ''}, {work_days_remaining} to go"
     )
 
     print_items(
