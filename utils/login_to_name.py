@@ -22,6 +22,7 @@ def login_to_name(login):
         "cartermak": "Carter Mak",
         "jeffpamer": "Jeff Pamer",
         "sschaffe": "Steve Schaffer",
+        "dandelany": "Dan Delany",
     }
     if login in logins:
         return logins[login]
